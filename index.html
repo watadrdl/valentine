@@ -6,23 +6,27 @@
   <title>Valentine?</title>
   <style>
     :root{
-      --bg1:#ffd1dc;
-      --bg2:#c7ddff;
-      --card:#fff;
-      --text:#111;
-      --muted:#666;
+      --bg:#000;
+      --card:#0f0f12;
+      --text:#ffffff;
+      --muted:rgba(255,255,255,.72);
       --yes:#ff3b6b;
-      --shadow: rgba(0,0,0,.15);
+      --shadow: rgba(0,0,0,.70);
+      --border: rgba(255,255,255,.08);
     }
+
     *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+
     body{
-      margin:0; min-height:100vh; display:grid; place-items:center; padding:24px;
-      background:
-        radial-gradient(900px 600px at 20% 30%, var(--bg2), transparent 60%),
-        radial-gradient(900px 600px at 80% 70%, var(--bg1), transparent 60%),
-        linear-gradient(135deg,#ffe3ea,#dbe9ff);
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      background: var(--bg);
       overflow:hidden;
     }
+
     .card{
       width:min(860px,92vw);
       height:min(460px,72vh);
@@ -37,33 +41,34 @@
       align-items:center;
       justify-content:center;
       gap:12px;
+      border:1px solid var(--border);
     }
+
     .top{
-      display:flex; flex-direction:column; align-items:center; gap:10px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
       transform: translateY(-10px);
     }
-    .blob{
-      width:88px;height:88px;border-radius:26px 26px 30px 30px;
-      background:#ffcc88;
-      box-shadow:0 12px 30px rgba(0,0,0,.12);
-      position:relative;
-      display:grid; place-items:center;
+
+    /* Logo */
+    .logo{
+      width:118px;
+      height:118px;
+      display:grid;
+      place-items:center;
     }
-    .blob:before,.blob:after{
-      content:""; position:absolute; width:9px;height:9px;border-radius:50%;
-      background:#111; top:36px;
+    .logo img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      filter: drop-shadow(0 14px 32px rgba(0,0,0,.75));
+      animation: float 3.1s ease-in-out infinite;
     }
-    .blob:before{ left:26px;}
-    .blob:after{ right:26px;}
-    .mouth{
-      position:absolute; top:52px; width:0;height:0;
-      border-left:7px solid transparent;border-right:7px solid transparent;
-      border-top:11px solid #ff5a86;
-      opacity:.9;
-    }
-    .spark{
-      position:absolute; right:-6px; top:-8px;
-      font-size:26px; transform: rotate(10deg);
+    @keyframes float{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-6px); }
     }
 
     h1{
@@ -73,7 +78,9 @@
       font-size:clamp(22px,3.2vw,36px);
       color:var(--text);
       line-height:1.1;
+      letter-spacing:.2px;
     }
+
     .sub{
       margin:0;
       color:var(--muted);
@@ -90,13 +97,16 @@
     }
 
     button{
-      border:none; cursor:pointer; user-select:none;
+      border:none;
+      cursor:pointer;
+      user-select:none;
       border-radius:999px;
       padding:12px 26px;
       font-size:16px;
-      transition: transform .12s ease, box-shadow .12s ease;
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
       position:absolute;
     }
+
     #yes{
       background:var(--yes);
       color:#fff;
@@ -110,50 +120,73 @@
 
     #no{
       background:transparent;
-      color:#111;
+      color:var(--text);
       padding:12px 18px;
       left: 58%;
       top: 66px;
+      opacity:.9;
     }
 
     .tiny{
-      position:absolute; bottom:12px; left:0; right:0;
-      text-align:center; font-size:13px; color:var(--muted);
+      position:absolute;
+      bottom:12px;
+      left:0;
+      right:0;
+      text-align:center;
+      font-size:13px;
+      color:var(--muted);
     }
 
     /* Celebration overlay */
     .overlay{
-      position:absolute; inset:0;
+      position:absolute;
+      inset:0;
       display:none;
-      background: rgba(0,0,0,.42);
-      align-items:center; justify-content:center;
+      background: rgba(0,0,0,.55);
+      align-items:center;
+      justify-content:center;
       padding:18px;
+      backdrop-filter: blur(6px);
     }
     .overlay.show{ display:flex; }
+
     .modal{
       width:min(560px,92vw);
-      background:#fff;
+      background:#121214;
+      color:#fff;
       border-radius:18px;
       padding:18px 18px 14px;
-      box-shadow:0 22px 70px rgba(0,0,0,.25);
+      box-shadow:0 22px 70px rgba(0,0,0,.45);
       text-align:center;
       position:relative;
       overflow:hidden;
+      border:1px solid var(--border);
     }
     .modal h2{ margin:6px 0 8px; font-size:24px; }
-    .modal p{ margin:0 0 14px; color:#333; line-height:1.35; }
+    .modal p{ margin:0 0 14px; color: rgba(255,255,255,.85); line-height:1.35; }
+
     .close{
-      background:#111; color:#fff; padding:10px 18px; border-radius:999px;
+      background:#fff;
+      color:#111;
+      padding:10px 18px;
+      border-radius:999px;
+      position:static;
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
     }
+    .close:hover{ transform: translateY(-1px); }
+    .close:active{ transform: translateY(0px) scale(.99); }
 
     /* Simple confetti */
     .confetti{
-      position:absolute; inset:-40px;
+      position:absolute;
+      inset:-40px;
       pointer-events:none;
     }
     .confetti span{
       position:absolute;
-      width:10px;height:16px;border-radius:4px;
+      width:10px;
+      height:16px;
+      border-radius:4px;
       opacity:.95;
       animation: fall 1.6s linear infinite;
     }
@@ -166,15 +199,17 @@
       .arena{ height:210px; }
       #yes{ left: 22%; }
       #no{ left: 60%; }
+      .logo{ width:108px; height:108px; }
     }
   </style>
 </head>
+
 <body>
   <div class="card" id="card">
     <div class="top">
-      <div class="blob" aria-hidden="true">
-        <div class="mouth"></div>
-        <div class="spark">💖</div>
+      <!-- Put pusheen.png in the same folder as this index.html -->
+      <div class="logo" aria-hidden="true">
+        <img src="pusheen.png" alt="Valentine cat logo">
       </div>
 
       <h1><span id="name">Kaitlyn</span>, be my valentine?</h1>
@@ -214,13 +249,13 @@
 
     let dodges = 0;
     const lines = [
-      "Wait… why are you hovering that? 🤨",
+      "Wait… listen to your heart instead of listening to EMILY! 🤨",
       "Absolutely not 😭",
-      "Be serious right now.",
-      "I moved. What now? 😌",
-      "Okay you’re kinda determined…",
+      "Emily IS A BAD INFLUENCE!",
+      "I moved. maybe think again...please? 😌",
+      "Okay you’re kinda determined and it scares me…",
       "This is getting embarrassing for you 😭",
-      "Just click Yes. Like a normal person. 💘"
+      "Just click Yes. Like a normal person and accept my love. 💘"
     ];
 
     function rect(el){ return el.getBoundingClientRect(); }
@@ -306,7 +341,7 @@
         const delay = Math.random() * 0.7;
         const dur = 1.1 + Math.random()*1.2;
 
-        // random colors without specifying a palette list (simple HSL)
+        // random colors (simple HSL)
         const hue = Math.floor(Math.random()*360);
         s.style.background = `hsl(${hue} 90% 60%)`;
 
@@ -320,7 +355,14 @@
     }
 
     // Start with a little movement so it feels alive
-    setTimeout(() => { moveNoButton(); dodges = 0; sub.textContent = "Choose wisely 😌"; tiny.textContent = "P.S. the “No” button is… dramatic."; }, 450);
+    setTimeout(() => {
+      moveNoButton();
+      dodges = 0;
+      sub.textContent = "Choose wisely 😌";
+      tiny.textContent = "P.S. the “No” button is… dramatic.";
+      yesBtn.style.transform = "scale(1)";
+    }, 450);
   </script>
 </body>
 </html>
+
